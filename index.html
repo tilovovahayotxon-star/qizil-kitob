@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📕 O'zbekiston Qizil Kitobi — Interaktiv</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#030806;--bg-2:#0a1410;--bg-3:#0f1f17;
+  --green:#2d6a4f;--green-l:#52b788;--green-xl:#95d5b2;
+  --gold:#f4a261;--gold-l:#ffd166;
+  --red:#e63946;--blue:#4a90e2;--purple:#9b59b6;
+  --cream:#f1faee;--text:#e8f5e9;--text-dim:#8baea0;
+  --glass:rgba(255,255,255,0.04);--glass-2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.08);--border-hi:rgba(82,183,136,0.4);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 20%,rgba(82,183,136,0.15) 0,transparent 45%),radial-gradient(circle at 85% 75%,rgba(244,162,97,0.12) 0,transparent 45%),radial-gradient(circle at 50% 50%,rgba(123,44,191,0.08) 0,transparent 60%);z-index:-2;animation:bgPulse 15s ease-in-out infinite}
+@keyframes bgPulse{0%,100%{opacity:0.8}50%{opacity:1}}
+
+.bg-orb{position:fixed;border-radius:50%;filter:blur(100px);opacity:0.35;z-index:-1;pointer-events:none}
+.orb-1{width:500px;height:500px;background:var(--green);top:-200px;left:-200px;animation:orbFloat1 20s infinite}
+.orb-2{width:400px;height:400px;background:var(--gold);bottom:-100px;right:-100px;animation:orbFloat2 25s infinite}
+.orb-3{width:300px;height:300px;background:#7b2cbf;top:50%;left:50%;animation:orbFloat3 30s infinite}
+@keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(100px,150px)}}
+@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-150px,-100px)}}
+@keyframes orbFloat3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.3)}}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2rem;transition:all 0.4s}
+header.scrolled{padding:0.7rem 2rem;background:rgba(3,8,6,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+.header-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:flex;align-items:center;gap:0.8rem;cursor:pointer}
+.logo-icon{font-size:1.8rem;filter:drop-shadow(0 0 20px var(--gold));animation:bookFloat 4s ease-in-out infinite}
+@keyframes bookFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.logo-text h1{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--cream);line-height:1.1}
+.logo-text p{font-size:0.65rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+nav{display:flex;gap:0.3rem;align-items:center;flex-wrap:wrap}
+.nav-btn{background:transparent;border:none;color:var(--text-dim);padding:0.7rem 1rem;border-radius:50px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;transition:all 0.3s;display:flex;align-items:center;gap:0.4rem}
+.nav-btn:hover{color:var(--cream);background:var(--glass-2)}
+.nav-btn.active{background:linear-gradient(135deg,var(--green-l),var(--green));color:white;box-shadow:0 8px 20px rgba(82,183,136,0.4)}
+.nav-btn .badge{background:var(--red);color:white;font-size:0.6rem;padding:2px 6px;border-radius:10px;min-width:16px;text-align:center}
+
+main{max-width:1500px;margin:0 auto;padding:0 2rem;min-height:100vh}
+.page{display:none}
+.page.active{display:block;animation:pageIn 0.6s}
+@keyframes pageIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 0 4rem;position:relative;overflow:hidden}
+.hero-content{max-width:950px;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.2rem;background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.3);border-radius:50px;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green-xl);margin-bottom:2rem;backdrop-filter:blur(10px)}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green-l);box-shadow:0 0 10px var(--green-l);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,5.5rem);font-weight:900;line-height:1.05;color:var(--cream);margin-bottom:1.5rem;letter-spacing:-0.02em}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--green-xl) 0%,var(--gold-l) 50%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.hero p{font-size:clamp(1rem,1.5vw,1.2rem);max-width:640px;margin:0 auto 2.5rem;line-height:1.7;color:var(--text-dim)}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{padding:1rem 2rem;border-radius:50px;border:none;font-family:inherit;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);display:inline-flex;align-items:center;gap:0.6rem}
+.btn-primary{background:linear-gradient(135deg,var(--green-l),var(--green));color:white;box-shadow:0 15px 40px rgba(82,183,136,0.3)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(82,183,136,0.5)}
+.btn-outline{background:var(--glass);color:var(--cream);border:1px solid var(--border);backdrop-filter:blur(20px)}
+.btn-outline:hover{transform:translateY(-4px);border-color:var(--gold);color:var(--gold-l)}
+.btn-quiz{background:linear-gradient(135deg,var(--gold),#e67e22);color:white;box-shadow:0 15px 40px rgba(244,162,97,0.3)}
+.btn-quiz:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(244,162,97,0.5)}
+
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:5rem;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--green-xl),var(--gold-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.hero-stat-label{font-size:0.75rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-top:0.5rem;font-weight:600}
+
+.hero-floating{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.float-card{position:absolute;width:120px;height:160px;border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,0.6);border:2px solid rgba(255,255,255,0.1);opacity:0.5;animation:floatCard 12s ease-in-out infinite}
+.float-card img{width:100%;height:100%;object-fit:cover}
+.float-card:nth-child(1){top:15%;left:5%;animation-delay:0s}
+.float-card:nth-child(2){top:60%;left:8%;animation-delay:2s;width:100px;height:130px}
+.float-card:nth-child(3){top:20%;right:6%;animation-delay:1s;width:110px;height:150px}
+.float-card:nth-child(4){top:65%;right:4%;animation-delay:3s}
+.float-card:nth-child(5){top:10%;left:45%;animation-delay:4s;width:90px;height:120px}
+.float-card:nth-child(6){bottom:10%;left:30%;animation-delay:5s;width:100px;height:135px}
+@keyframes floatCard{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-30px) rotate(3deg)}}
+@media(max-width:900px){.hero-floating{display:none}}
+
+.scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;color:var(--text-dim);font-size:0.7rem;letter-spacing:2px;text-transform:uppercase}
+.scroll-mouse{width:24px;height:40px;border:2px solid var(--text-dim);border-radius:12px;position:relative}
+.scroll-mouse::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:3px;height:8px;background:var(--green-l);border-radius:2px;animation:scrollDot 1.5s infinite}
+@keyframes scrollDot{0%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,12px);opacity:0}}
+
+.section{padding:6rem 0}
+.section-head{text-align:center;margin-bottom:3rem}
+.section-head .label{font-size:0.75rem;color:var(--green-xl);letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:1rem;display:block}
+.section-head h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:1rem}
+.section-head p{color:var(--text-dim);max-width:600px;margin:0 auto;line-height:1.7}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.feature{background:var(--glass);border:1px solid var(--border);border-radius:24px;padding:2rem;transition:all 0.5s;position:relative;overflow:hidden;backdrop-filter:blur(20px)}
+.feature::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green-l),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform 0.5s}
+.feature:hover{transform:translateY(-8px);background:var(--glass-2);border-color:var(--border-hi);box-shadow:0 30px 60px rgba(0,0,0,0.4)}
+.feature:hover::before{transform:scaleX(1)}
+.feature-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,rgba(82,183,136,0.2),rgba(244,162,97,0.1));display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin-bottom:1.2rem;border:1px solid var(--border)}
+.feature h3{font-size:1.1rem;font-weight:700;color:var(--cream);margin-bottom:0.6rem}
+.feature p{font-size:0.9rem;color:var(--text-dim);line-height:1.6}
+
+.top-animals{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:2rem}
+.top-animal{position:relative;height:280px;border-radius:20px;overflow:hidden;cursor:pointer;transition:all 0.5s;border:1px solid var(--border)}
+.top-animal:hover{transform:translateY(-8px) scale(1.02);border-color:var(--border-hi);box-shadow:0 30px 60px rgba(0,0,0,0.5)}
+.top-animal img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s}
+.top-animal:hover img{transform:scale(1.1)}
+.top-animal::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(3,8,6,0.95) 0%,transparent 60%);z-index:1}
+.top-animal-info{position:absolute;bottom:0;left:0;right:0;padding:1.2rem;z-index:2}
+.top-animal-info h4{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--cream);margin-bottom:0.3rem}
+.top-animal-info p{font-size:0.75rem;color:var(--green-xl);font-style:italic}
+
+.filters{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem;background:var(--glass);backdrop-filter:blur(20px);border-radius:50px;border:1px solid var(--border);align-items:center;justify-content:center}
+.filter-group{display:flex;align-items:center;gap:0.4rem}
+.filter-group label{font-size:0.75rem;color:var(--text-dim);font-weight:600}
+.filter-group select{padding:0.5rem 1rem;border-radius:50px;border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.3s}
+.filter-group select:focus{outline:none;border-color:var(--green-l)}
+.filter-group select option{background:var(--bg-2)}
+
+.search-box{position:relative;max-width:420px;margin:0 auto 2rem}
+.search-box input{width:100%;padding:0.9rem 1.2rem 0.9rem 3rem;border-radius:50px;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(20px);color:var(--text);font-family:inherit;font-size:0.9rem;transition:all 0.3s}
+.search-box input:focus{outline:none;border-color:var(--green-l);box-shadow:0 0 30px rgba(82,183,136,0.3);background:var(--glass-2)}
+.search-box input::placeholder{color:var(--text-dim)}
+.search-icon{position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);font-size:1rem;opacity:0.6}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.8rem}
+
+.animal-card{position:relative;background:var(--glass);border:1px solid var(--border);border-radius:24px;overflow:hidden;cursor:pointer;transition:all 0.6s cubic-bezier(0.4,0,0.2,1);opacity:0;transform:translateY(40px);animation:cardReveal 0.8s forwards;backdrop-filter:blur(20px)}
+@keyframes cardReveal{to{opacity:1;transform:translateY(0)}}
+.animal-card:hover{transform:translateY(-12px);border-color:var(--border-hi);box-shadow:0 40px 80px rgba(0,0,0,0.5),0 0 60px rgba(82,183,136,0.2)}
+.card-img-wrap{position:relative;height:260px;overflow:hidden;background:linear-gradient(135deg,var(--bg-3),var(--green))}
+.card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s cubic-bezier(0.4,0,0.2,1)}
+.animal-card:hover .card-img{transform:scale(1.15)}
+.card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(3,8,6,0.95) 0%,transparent 60%);z-index:1;pointer-events:none}
+.card-status{position:absolute;top:1rem;right:1rem;padding:0.4rem 0.9rem;border-radius:50px;font-size:0.68rem;font-weight:800;color:white;text-transform:uppercase;letter-spacing:0.5px;backdrop-filter:blur(10px);z-index:2;box-shadow:0 8px 20px rgba(0,0,0,0.4);display:flex;align-items:center;gap:0.3rem}
+.card-status::before{content:'';width:6px;height:6px;border-radius:50%;background:white;animation:pulse 1.5s infinite}
+.card-body{padding:1.5rem;position:relative;z-index:2}
+.card-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--cream);margin-bottom:0.3rem;line-height:1.2}
+.card-latin{font-size:0.8rem;font-style:italic;color:var(--green-xl);margin-bottom:1rem}
+.card-meta{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.8rem}
+.card-tag{font-size:0.7rem;padding:0.3rem 0.7rem;border-radius:50px;background:rgba(82,183,136,0.1);border:1px solid rgba(82,183,136,0.2);color:var(--green-xl);font-weight:600}
+.fav-btn{position:absolute;bottom:1.2rem;right:1.2rem;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.5);border:1px solid var(--border);backdrop-filter:blur(10px);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s;z-index:3}
+.fav-btn:hover{transform:scale(1.15);background:var(--red);border-color:var(--red)}
+.fav-btn.active{background:var(--red);border-color:var(--red);animation:heartPop 0.5s}
+@keyframes heartPop{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+.detail{max-width:1200px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:32px;overflow:hidden;backdrop-filter:blur(20px)}
+.detail-hero{position:relative;height:520px;overflow:hidden}
+.detail-img{width:100%;height:100%;object-fit:cover}
+.detail-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(3,8,6,1) 0%,rgba(3,8,6,0.3) 40%,transparent 100%);pointer-events:none}
+.detail-hero-content{position:absolute;bottom:0;left:0;right:0;padding:3rem;z-index:2}
+.detail-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:0.5rem}
+.detail-latin{font-size:1.1rem;font-style:italic;color:var(--green-xl)}
+.detail-status{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.8rem;font-weight:800;color:white;text-transform:uppercase;letter-spacing:1px;box-shadow:0 8px 25px rgba(0,0,0,0.5);margin-top:1rem}
+.detail-body{padding:3rem}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+.detail-item{background:var(--glass-2);padding:1.3rem;border-radius:16px;border:1px solid var(--border);transition:all 0.3s}
+.detail-item:hover{transform:translateY(-4px);border-color:var(--border-hi);background:rgba(82,183,136,0.08)}
+.detail-item .label{font-size:0.7rem;text-transform:uppercase;color:var(--text-dim);letter-spacing:1.5px;font-weight:700;margin-bottom:0.5rem}
+.detail-item .value{font-size:1rem;font-weight:600;color:var(--cream);line-height:1.5}
+.detail-desc{background:linear-gradient(135deg,rgba(82,183,136,0.08),rgba(244,162,97,0.05));padding:2rem;border-radius:20px;line-height:1.8;font-size:1rem;border-left:4px solid var(--green-l);color:var(--text);margin-bottom:1.5rem}
+.detail-desc strong{color:var(--gold-l);display:block;margin-bottom:0.8rem;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase}
+
+/* EXTRA INFO SECTIONS */
+.extra-info{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem}
+@media(max-width:700px){.extra-info{grid-template-columns:1fr}}
+.info-card{background:var(--glass-2);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
+.info-card h4{font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--gold-l);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.info-card ul{list-style:none}
+.info-card li{font-size:0.9rem;color:var(--text);padding:0.4rem 0;border-bottom:1px dashed var(--border);display:flex;gap:0.5rem}
+.info-card li:last-child{border-bottom:none}
+.info-card li::before{content:'•';color:var(--green-l);font-weight:900}
+
+/* STATS */
+.chart-section{background:var(--glass);border:1px solid var(--border);border-radius:24px;padding:2.5rem;margin-bottom:1.5rem;backdrop-filter:blur(20px)}
+.chart-section h3{font-family:'Playfair Display',serif;color:var(--cream);font-size:1.3rem;margin-bottom:1.5rem}
+.bar-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.bar-label{min-width:180px;font-size:0.9rem;font-weight:600;color:var(--text)}
+.bar-track{flex:1;height:32px;background:rgba(0,0,0,0.3);border-radius:16px;overflow:hidden}
+.bar-fill{height:100%;border-radius:16px;transition:width 1.4s;display:flex;align-items:center;justify-content:flex-end;padding-right:1rem;color:white;font-size:0.8rem;font-weight:800;position:relative;overflow:hidden}
+.bar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);animation:barShine 2.5s infinite}
+@keyframes barShine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* QUIZ */
+.quiz-hero{text-align:center;padding:8rem 0 3rem}
+.quiz-hero h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:var(--cream);margin-bottom:1rem}
+.quiz-hero p{color:var(--text-dim);max-width:600px;margin:0 auto 2rem;line-height:1.7}
+
+.quiz-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-bottom:3rem}
+.quiz-cat{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:1.8rem;cursor:pointer;transition:all 0.3s;text-align:center;backdrop-filter:blur(20px)}
+.quiz-cat:hover{transform:translateY(-6px);border-color:var(--border-hi);background:var(--glass-2)}
+.quiz-cat-icon{font-size:2.5rem;margin-bottom:0.8rem;display:block}
+.quiz-cat h4{font-size:1rem;font-weight:700;color:var(--cream);margin-bottom:0.4rem}
+.quiz-cat p{font-size:0.8rem;color:var(--text-dim)}
+
+.quiz-container{max-width:800px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:24px;padding:3rem;backdrop-filter:blur(20px);display:none}
+.quiz-container.active{display:block;animation:pageIn 0.6s}
+
+.quiz-progress{height:6px;background:rgba(0,0,0,0.3);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+.quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--green-l),var(--gold));border-radius:10px;transition:width 0.5s}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;font-size:0.85rem;color:var(--text-dim);font-weight:600}
+.quiz-score{color:var(--gold-l);font-weight:800;font-size:1.1rem}
+
+.quiz-question{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--cream);margin-bottom:2rem;line-height:1.4}
+
+.quiz-answers{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}
+.quiz-answer{padding:1.2rem 1.5rem;background:var(--glass-2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:all 0.3s;font-size:1rem;color:var(--text);text-align:left;font-family:inherit;font-weight:500;display:flex;align-items:center;gap:0.8rem}
+.quiz-answer:hover:not(.disabled){border-color:var(--green-l);background:rgba(82,183,136,0.1);transform:translateX(8px)}
+.quiz-answer.correct{border-color:var(--green-l);background:rgba(82,183,136,0.2);animation:correctPulse 0.6s}
+.quiz-answer.wrong{border-color:var(--red);background:rgba(230,57,70,0.2);animation:wrongShake 0.5s}
+.quiz-answer.disabled{cursor:not-allowed;opacity:0.7}
+@keyframes correctPulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.answer-letter{width:32px;height:32px;border-radius:50%;background:var(--glass-2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;flex-shrink:0}
+
+.quiz-nav{display:flex;justify-content:space-between;gap:1rem}
+.quiz-btn{padding:0.9rem 1.8rem;border-radius:50px;border:none;background:linear-gradient(135deg,var(--green-l),var(--green));color:white;font-family:inherit;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s}
+.quiz-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(82,183,136,0.4)}
+.quiz-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+.quiz-result{text-align:center;padding:2rem 0}
+.quiz-result-emoji{font-size:5rem;margin-bottom:1rem;animation:heartPop 0.8s}
+.quiz-result h3{font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream);margin-bottom:0.8rem}
+.quiz-result-score{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--green-xl),var(--gold-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:1rem 0}
+.quiz-result p{color:var(--text-dim);margin-bottom:2rem;font-size:1.05rem}
+
+/* EMPTY */
+.empty{text-align:center;padding:5rem 2rem;color:var(--text-dim);grid-column:1/-1}
+.empty-icon{font-size:5rem;margin-bottom:1.5rem;opacity:0.4}
+.empty h3{font-size:1.4rem;color:var(--cream);margin-bottom:0.5rem;font-family:'Playfair Display',serif}
+
+.back-btn{display:inline-flex;align-items:center;gap:0.6rem;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(20px);color:var(--text);padding:0.8rem 1.5rem;border-radius:50px;cursor:pointer;font-family:inherit;font-size:0.9rem;font-weight:600;margin-bottom:2rem;transition:all 0.3s}
+.back-btn:hover{background:var(--green-l);border-color:var(--green-l);color:white;transform:translateX(-5px);box-shadow:0 10px 30px rgba(82,183,136,0.4)}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:linear-gradient(135deg,var(--green-l),var(--green));color:white;padding:1rem 1.5rem;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,0.5);font-weight:600;font-size:0.9rem;z-index:1000;transform:translateX(500px);opacity:0;transition:all 0.4s;max-width:340px}
+.toast.show{transform:translateX(0);opacity:1}
+
+.scroll-top{position:fixed;bottom:2rem;left:2rem;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--green-l),var(--green));border:none;color:white;font-size:1.3rem;cursor:pointer;box-shadow:0 15px 40px rgba(82,183,136,0.5);transition:all 0.3s;opacity:0;pointer-events:none;z-index:99}
+.scroll-top.show{opacity:1;pointer-events:auto}
+.scroll-top:hover{transform:translateY(-5px) scale(1.1)}
+
+footer{text-align:center;padding:4rem 2rem 3rem;color:var(--text-dim);font-size:0.85rem;border-top:1px solid var(--border);margin-top:6rem}
+footer strong{color:var(--cream);font-family:'Playfair Display',serif;font-size:1.1rem}
+footer .heart{color:var(--red);display:inline-block;animation:pulse 1s infinite}
+
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.8s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  .nav-btn span:not(.badge){display:none}
+  .nav-btn{padding:0.7rem}
+  .detail-hero{height:350px}
+  .detail-body{padding:1.5rem}
+  .hero-stats{gap:1.5rem}
+  .hero-stat-num{font-size:2rem}
+  .quiz-container{padding:1.5rem}
+}
+@media(max-width:600px){
+  header{padding:1rem}
+  main{padding:0 1rem}
+  .hero{padding:6rem 0 3rem}
+  .grid{grid-template-columns:1fr;gap:1.2rem}
+  .filters{border-radius:20px;padding:1rem}
+  .bar-label{min-width:110px;font-size:0.75rem}
+  .toast{right:1rem;left:1rem;bottom:1rem}
+  .scroll-top{left:1rem;bottom:1rem;width:46px;height:46px}
+  .detail-hero{height:280px}
+  .detail-hero-content{padding:1.5rem}
+  .quiz-question{font-size:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<header id="header">
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')">
+      <div class="logo-icon">📕</div>
+      <div class="logo-text">
+        <h1>QIZIL KITOBI</h1>
+        <p>O'zbekiston</p>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-page="home" onclick="showPage('home')">🏠 <span>Bosh</span></button>
+      <button class="nav-btn" data-page="animals" onclick="showPage('animals')">📕 <span>Hayvonlar</span></button>
+      <button class="nav-btn" data-page="quiz" onclick="showPage('quiz')">🎯 <span>Test</span></button>
+      <button class="nav-btn" data-page="stats" onclick="showPage('stats')">📊 <span>Statistika</span></button>
+      <button class="nav-btn" data-page="favorites" onclick="showPage('favorites')">❤️ <span>Sevimli</span> <span class="badge" id="favBadge" style="display:none;">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-floating" id="heroFloating"></div>
+      <div class="hero-content">
+        <div class="hero-badge"><span class="dot"></span> Tabiatni asraylik</div>
+        <h1>Yo'qolib borayotgan<br><span class="gradient">hayvonlar olami</span></h1>
+        <p>O'zbekiston Qizil kitobiga kiritilgan 30 ta noyob tur bilan tanishing. Har bir hayvon — tabiatning bebaho xazinasi.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="showPage('animals')">📕 Hayvonlarni ko'rish</button>
+          <button class="btn btn-quiz" onclick="showPage('quiz')">🎯 Testni boshlash</button>
+          <button class="btn btn-outline" onclick="showPage('stats')">📊 Statistika</button>
+        </div>
+        <div class="hero-stats" id="heroStats"></div>
+      </div>
+      <div class="scroll-indicator">
+        <div class="scroll-mouse"></div>
+        <span>Pastga suring</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head reveal">
+        <span class="label">Diqqatga sazovor</span>
+        <h2>Eng noyob turlar</h2>
+      </div>
+      <div class="top-animals" id="topAnimals"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head reveal">
+        <span class="label">Imkoniyatlar</span>
+        <h2>Nima qila olasiz?</h2>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <div class="feature-icon">🔍</div>
+          <h3>Aqlli qidiruv</h3>
+          <p>30 ta tur bo'yicha tezkor qidiruv.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon">🎯</div>
+          <h3>Bilimingizni sinang</h3>
+          <p>Test topshiring va natijani bilib oling.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon">❤️</div>
+          <h3>Sevimlilar</h3>
+          <p>Yoqqan hayvonlarni saqlang.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon">📊</div>
+          <h3>Vizual statistika</h3>
+          <p>Xavf darajalari va turkumlar bo'yicha tahlil.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="page-animals" style="padding-top:8rem;padding-bottom:4rem;">
+    <div class="section-head">
+      <span class="label">Katalog</span>
+      <h2>Hayvonlar ro'yxati</h2>
+    </div>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Nomi bo'yicha qidiring..." oninput="renderAnimals()">
+    </div>
+    <div class="filters">
+      <div class="filter-group">
+        <label>HOLAT:</label>
+        <select id="filterStatus" onchange="renderAnimals()">
+          <option value="">Barchasi</option>
+          <option value="Исчезающий">🔴 Исчезающий</option>
+          <option value="Вымерший">⚫ Вымерший</option>
+          <option value="Сокращающийся">🟠 Сокращающийся</option>
+          <option value="Уязвимый">🟡 Уязвимый</option>
+          <option value="Редкий">🔵 Редкий</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>TURKUM:</label>
+        <select id="filterType" onchange="renderAnimals()">
+          <option value="">Barchasi</option>
+          <option value="Qush">🦅 Qushlar</option>
+          <option value="Sutemizuvchi">🐆 Sutemizuvchilar</option>
+          <option value="Sudralib yuruvchi">🐍 Sudralib yuruvchilar</option>
+          <option value="Baliq">🐟 Baliqlar</option>
+          <option value="Hasharot">🦋 Hasharotlar</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>SARALASH:</label>
+        <select id="sortBy" onchange="renderAnimals()">
+          <option value="name">A-Z</option>
+          <option value="risk">Xavf darajasi</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid" id="animalsGrid"></div>
+  </section>
+
+  <section class="page" id="page-detail" style="padding-top:8rem;padding-bottom:4rem;">
+    <div id="detailContent"></div>
+  </section>
+
+  <section class="page" id="page-quiz">
+    <div class="quiz-hero">
+      <div class="section-head">
+        <span class="label">Bilim sinovi</span>
+        <h2>🎯 Test</h2>
+        <p>O'zingizni sinab ko'ring! 10 ta savol, 4 variant. Har bir to'g'ri javob 10 ball.</p>
+      </div>
+    </div>
+
+    <div class="quiz-categories" id="quizCategories">
+      <div class="quiz-cat" onclick="startQuiz('all')">
+        <span class="quiz-cat-icon">🎲</span>
+        <h4>Aralash test</h4>
+        <p>Barcha mavzulardan savollar</p>
+      </div>
+      <div class="quiz-cat" onclick="startQuiz('Qush')">
+        <span class="quiz-cat-icon">🦅</span>
+        <h4>Qushlar</h4>
+        <p>Faqat qushlar haqida</p>
+      </div>
+      <div class="quiz-cat" onclick="startQuiz('Sutemizuvchi')">
+        <span class="quiz-cat-icon">🐆</span>
+        <h4>Sutemizuvchilar</h4>
+        <p>Faqat sutemizuvchilar</p>
+      </div>
+      <div class="quiz-cat" onclick="startQuiz('Sudralib yuruvchi')">
+        <span class="quiz-cat-icon">🐍</span>
+        <h4>Sudralib yuruvchilar</h4>
+        <p>Faqat sudralib yuruvchilar</p>
+      </div>
+    </div>
+
+    <div class="quiz-container" id="quizContainer">
+      <div class="quiz-progress"><div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div></div>
+      <div class="quiz-meta">
+        <span id="quizCounter">Savol 1/10</span>
+        <span class="quiz-score" id="quizScore">Ball: 0</span>
+      </div>
+      <div id="quizContent"></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-stats" style="padding-top:8rem;padding-bottom:4rem;">
+    <div class="section-head">
+      <span class="label">Tahlil</span>
+      <h2>Statistika</h2>
+    </div>
+    <div class="chart-section reveal">
+      <h3>⚠️ Xavf darajalari</h3>
+      <div id="statusChart"></div>
+    </div>
+    <div class="chart-section reveal">
+      <h3>🦴 Turkumlar</h3>
+      <div id="typeChart"></div>
+    </div>
+    <div class="chart-section reveal">
+      <h3>🌍 Hududlar</h3>
+      <div id="regionChart"></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-favorites" style="padding-top:8rem;padding-bottom:4rem;">
+    <div class="section-head">
+      <span class="label">Sizning to'plamingiz</span>
+      <h2>❤️ Sevimli hayvonlar</h2>
+    </div>
+    <div class="grid" id="favoritesGrid"></div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>📕 O'zbekiston Qizil Kitobi</strong><br><br>
+  Tabiatni asrash — har birimizning burchimiz <span class="heart">❤️</span>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   RASM URL MANZILLARI (Unsplash — ishonchli CDN)
+   ============================================================ */
+const IMG = {
+  1:"https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=800&q=80",
+  2:"https://images.unsplash.com/photo-1604255190851-0b09a5c6d53c?w=800&q=80",
+  3:"https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=800&q=80",
+  4:"https://images.unsplash.com/photo-1484406566174-9da000fda645?w=800&q=80",
+  5:"https://images.unsplash.com/photo-1589656966895-2f33e7653819?w=800&q=80",
+  6:"https://images.unsplash.com/photo-1564466809058-bf4114d55352?w=800&q=80",
+  7:"https://images.unsplash.com/photo-1531386151447-fd76ad50012f?w=800&q=80",
+  8:"https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=800&q=80",
+  9:"https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=800&q=80",
+  10:"https://images.unsplash.com/photo-1484406566174-9da000fda645?w=800&q=80",
+  11:"https://images.unsplash.com/photo-1535083783855-76ae62b2914e?w=800&q=80",
+  12:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800&q=80",
+  13:"https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=800&q=80",
+  14:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
+  15:"https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=800&q=80",
+  16:"https://images.unsplash.com/photo-1456926631375-92c8ce872def?w=800&q=80",
+  17:"https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=800&q=80",
+  18:"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800&q=80",
+  19:"https://images.unsplash.com/photo-1503431153062-9c91b9b4e5e0?w=800&q=80",
+  20:"https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=800&q=80",
+  21:"https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=800&q=80",
+  22:"https://images.unsplash.com/photo-1591825729269-caeb344f6df2?w=800&q=80",
+  23:"https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=800&q=80",
+  24:"https://images.unsplash.com/photo-1563280304-d1c67e81b20c?w=800&q=80",
+  25:"https://images.unsplash.com/photo-1518709594023-6eab9bab7b23?w=800&q=80",
+  26:"https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+  27:"https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=800&q=80",
+  28:"https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=800&q=80",
+  29:"https://images.unsplash.com/photo-1591360236480-4ed861025fa1?w=800&q=80",
+  30:"https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?w=800&q=80"
+};
+
+function makeSVG(emoji, c1, c2, id){
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="bg'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c1+'"/><stop offset="1" stop-color="'+c2+'"/></linearGradient><radialGradient id="glow'+id+'" cx="50%" cy="50%"><stop offset="0" stop-color="rgba(255,255,255,0.3)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><rect width="400" height="300" fill="url(#bg'+id+')"/><circle cx="200" cy="150" r="130" fill="url(#glow'+id+')"/><text x="200" y="185" font-size="150" text-anchor="middle" dominant-baseline="middle">'+emoji+'</text></svg>';
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+}
+
+/* ============================================================
+   30 TA HAYVON — to'liq ma'lumot
+   ============================================================ */
+const animals = [
+  {id:1,nameUz:"Oq boshli kalxat",nameLat:"Neophron percnopterus",emoji:"🦅",c1:"#1a3a5c",c2:"#0a1a2e",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Qush",region:"O'zbekiston, Markaziy Osiyo",size:"60–70 sm",weight:"1.6–2.4 kg",diet:"O'lik hayvonlar, mayda hayvonlar, tuxumlar",population:"~50–100 juft",lifespan:"20-30 yil",habitat:"Tog' va cho'l hududlari",description:"Yirik yirtqich qush. Tabiiy tozalovchi — o'lik hayvonlar bilan oziqlanib, ekotizimni toza saqlaydi. O'zbekistonda soni keskin kamayib bormoqda. Uyalarini qoyalarga quradi, 2 ta tuxum qo'yadi.",features:["Tabiiy sanitariya xizmati","Uzoqdan ko'ra oladi","Katta qanotlari bor"],threats:["Ovlash","Uya joylarining yo'qolishi","Zaharli oziq-ovqat"]},
+  {id:2,nameUz:"Qor qoploni",nameLat:"Panthera uncia",emoji:"🐆",c1:"#2d4a5c",c2:"#0d1a24",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Tyanshan, Pomir, Hisor",size:"100–130 sm",weight:"22–55 kg",diet:"Tog' echkilari, qo'ylar, kemiruvchilar",population:"~30–50 ta",lifespan:"15-18 yil",habitat:"Baland tog'lar 3000-4500 m",description:"Tog'larning 'xo'jayini'. Baland tog'larda yashaydi, juda ehtiyotkor. Xalqaro Qizil kitobga kiritilgan noyob tur. Mo'ynasi qalin va issiq, dumi uzun — muvozanat uchun.",features:["6 metr sakray oladi","Dumi 100 sm gacha","Yolg'iz yashaydi"],threats:["Brakonyerlik","Yashash joyi yo'qolishi","Iqlim o'zgarishi"]},
+  {id:3,nameUz:"Turon yo'lbarsi",nameLat:"Panthera tigris virgata",emoji:"🐅",c1:"#4a2a1a",c2:"#1a0a05",status:"Вымерший",statusColor:"#2c3e50",riskLevel:6,type:"Sutemizuvchi",region:"Markaziy Osiyo (tarixiy)",size:"200–270 sm",weight:"170–240 kg",diet:"Yirik tuyoqli hayvonlar",population:"0 — XX asrda yo'q bo'lgan",lifespan:"10-15 yil",habitat:"To'qay o'rmonlari, daryo bo'ylari",description:"XX asr o'rtalarida butunlay yo'q bo'lib ketdi. O'zbekiston tabiatining eng katta yo'qotishlaridan biri. Hozir faqat muzeylarda va xotiralarda qolgan.",features:["Eng katta mushuklardan","To'qaylarda yashagan","Suvni yaxshi ko'rgan"],threats:["Ovlash","To'qaylarning yo'qolishi","Yashash joyi buzilishi"]},
+  {id:4,nameUz:"Buxoro bug'usi",nameLat:"Cervus elaphus bactrianus",emoji:"🦌",c1:"#5c3a1a",c2:"#2a1a0a",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Amudaryo vodiysi",size:"165–265 sm",weight:"120–240 kg",diet:"O'tlar, barglar, shox-shabba",population:"~500–800 ta",lifespan:"15-20 yil",habitat:"To'qay o'rmonlari",description:"Noyob kenja tur. Faqat Amudaryo vodiysida yashaydi. Dunyoda eng kam uchraydigan bug'u turlaridan biri. Maxsus qo'riqxonalar yaratilgan.",features:["Shoxi 1.5 m gacha","Suvda suzadi","To'da bo'lib yashaydi"],threats:["Ovlash","Yashash joyi yo'qolishi"]},
+  {id:5,nameUz:"Tyanshan qo'ng'ir ayig'i",nameLat:"Ursus arctos isabellinus",emoji:"🐻",c1:"#4a3520",c2:"#1a1208",status:"Сокращающийся",statusColor:"#e67e22",riskLevel:4,type:"Sutemizuvchi",region:"Tyanshan, Pomir-Oloy",size:"140–200 sm",weight:"150–300 kg",diet:"O'simliklar, mevalar, asal, mayda hayvonlar",population:"~200–300 ta",lifespan:"20-25 yil",habitat:"Tog' o'rmonlari 1500-4000 m",description:"Markaziy Osiyo tog'larining yirik yirtqichi. Oqar bug'usi va och jigarrang mo'ynasi bilan ajralib turadi. O'tkir hid bilish qobiliyatiga ega.",features:["Hidi 3 km dan sezadi","Qishda uyquga ketadi","Tez yuguradi"],threats:["Ovlash","Yashash joyi buzilishi"]},
+  {id:6,nameUz:"Qizil bo'ri",nameLat:"Canis lupus",emoji:"🐺",c1:"#3a3a3a",c2:"#0a0a0a",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"O'zbekiston bo'ylab",size:"100–160 sm",weight:"30–60 kg",diet:"Tuyoqli hayvonlar, kemiruvchilar, quşlar",population:"~2000–3000 ta",lifespan:"12-16 yil",habitat:"Cho'l, tog', o'rmon",description:"Ilgari keng tarqalgan, hozir soni kamayib bormoqda. To'da bo'lib yashaydi, aqlli va chidamli hayvon. Ovlash taqiqlangan.",features:["To'da bo'lib yashaydi","Kuchli hid bilish","Kechasi ov qiladi"],threats:["Ovlash","Yashash joyi yo'qolishi"]},
+  {id:7,nameUz:"Markaziy Osiyo kobrasi",nameLat:"Naja oxiana",emoji:"🐍",c1:"#3a5c2a",c2:"#0f1a08",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sudralib yuruvchi",region:"Janubiy O'zbekiston",size:"100–160 sm",weight:"0.5–1.2 kg",diet:"Kemiruvchilar, qushlar, tuxumlar",population:"Noma'lum",lifespan:"15-20 yil",habitat:"Tog' etaklari, toshloq joylar",description:"Zaharli ilon. Surxondaryo va Qashqadaryoda uchraydi. Zaharidan tibbiyotda foydalaniladi. Ovlanib, soni kamayib bormoqda.",features:["Zahari kuchli","Kapyushon ochadi","Tunda faol"],threats:["Ovlash","Yashash joyi yo'qolishi"]},
+  {id:8,nameUz:"Burgut",nameLat:"Aquila chrysaetos",emoji:"🦅",c1:"#5c4a1a",c2:"#241a05",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Qush",region:"Tyanshan, Pomir",size:"75–95 sm",weight:"3–6.5 kg",diet:"Sug'urlar, quyonlar, qushlar",population:"~200–400 juft",lifespan:"20-30 yil",habitat:"Tog'lar, qoyalar",description:"Eng qudratli yirtqich qushlardan biri. O'zbekistonda an'anaviy burgutchilikda ishlatilgan. Tog'larda yashaydi, o'tkir ko'rish qobiliyatiga ega.",features:["1 km dan ko'radi","Soatiga 240 km","An'anaviy ov qushi"],threats:["Ovlash","Uya yo'qolishi"]},
+  {id:9,nameUz:"Onager (turkman kuloni)",nameLat:"Equus hemionus",emoji:"🦓",c1:"#6a5a4a",c2:"#241a10",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Qizilqum cho'li",size:"200–250 sm",weight:"200–260 kg",diet:"Cho'l o'simliklari, o'tlar",population:"~100–200 ta",lifespan:"20-25 yil",habitat:"Cho'l va yarim cho'l",description:"Yovvoyi eshak. Cho'l sharoitiga juda moslashgan. O'zbekistonda Qizilqum cho'lida uchraydi. Soatiga 60 km tezlikka chiqadi.",features:["Suvsiz 3 kun yashaydi","Tez yuguradi","To'da bo'lib yuradi"],threats:["Ovlash","Suv manbai kamayishi"]},
+  {id:10,nameUz:"Djeiran",nameLat:"Gazella subgutturosa",emoji:"🦌",c1:"#8a6a3a",c2:"#3a2a10",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"Qizilqum, Ustyurt",size:"95–125 sm",weight:"18–33 kg",diet:"Cho'l o'simliklari",population:"~1000–2000 ta",lifespan:"10-12 yil",habitat:"Cho'l va yarim cho'l",description:"Nafis va tez yuguradigan cho'l kiyigi. O'zbekiston cho'llarining ramzlaridan biri. Soatiga 80 km tezlikka chiqa oladi.",features:["Juda tez yuguradi","Nafis ko'rinish","Cho'lda yashaydi"],threats:["Ovlash","Yashash joyi yo'qolishi"]},
+  {id:11,nameUz:"Argali",nameLat:"Ovis ammon",emoji:"🐏",c1:"#5a4a3a",c2:"#1a1208",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"Tyanshan, Pomir",size:"120–200 sm",weight:"60–180 kg",diet:"Tog' o'tlari, o'simliklar",population:"~500–1000 ta",lifespan:"10-13 yil",habitat:"Baland tog'lar",description:"Dunyodagi eng yirik yovvoyi qo'ylardan biri. Erkaklarining shoxi 1.5 metrgacha yetadi. Baland tog'larda yashaydi.",features:["Shoxi 1.5 m gacha","180 kg gacha vazn","Baland tog'da yashaydi"],threats:["Ovlash (shoxi uchun)","Yashash joyi"]},
+  {id:12,nameUz:"Cho'l burguti",nameLat:"Aquila nipalensis",emoji:"🦅",c1:"#6a4a2a",c2:"#2a1808",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Qush",region:"O'zbekiston cho'llari",size:"70–85 sm",weight:"2–5 kg",diet:"Kemiruvchilar, sudralib yuruvchilar",population:"~100–200 juft",lifespan:"20-25 yil",habitat:"Cho'l va dashtlar",description:"Cho'l sharoitida yashovchi yirik yirtqich qush. Migratsiya qiladi. Soni keskin kamayib bormoqda.",features:["Migratsiya qiladi","Cho'lda yashaydi","Yaxshi uchadi"],threats:["Elektr liniyalari","Ovlash"]},
+  {id:13,nameUz:"Kipr burguti",nameLat:"Aquila heliaca",emoji:"🦅",c1:"#4a3a2a",c2:"#1a0a05",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Qush",region:"Janubiy O'zbekiston",size:"72–83 sm",weight:"2.5–4.5 kg",diet:"Kemiruvchilar, qushlar",population:"~100–200 juft",lifespan:"20 yil",habitat:"O'rmonlar, dashtlar",description:"Yirik yirtqich qush. O'zbekistonda kam uchraydi. Uyalarini baland daraxtlarga quradi.",features:["Katta qanot","Kuchli ko'rish"],threats:["Yashash joyi yo'qolishi","Elektr liniyalari"]},
+  {id:14,nameUz:"Torg'ay qirg'iy",nameLat:"Accipiter badius",emoji:"🦅",c1:"#4a4a2a",c2:"#1a1a05",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Qush",region:"O'zbekiston bo'ylab",size:"30–36 sm",weight:"100–200 g",diet:"Mayda qushlar, hasharotlar",population:"Kam o'rganilgan",lifespan:"10-15 yil",habitat:"Bog'lar, o'rmonlar",description:"Kichik yirtqich qush. Bog'larda va o'rmonlarda yashaydi. Tez va chaqqon.",features:["Chaqqon","Kichik o'lcham"],threats:["Yashash joyi"]},
+  {id:15,nameUz:"Tibet qum bo'risi",nameLat:"Vulpes ferrilata",emoji:"🦊",c1:"#8a6a4a",c2:"#3a2a10",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Sutemizuvchi",region:"Pomir, Tyanshan",size:"60–70 sm",weight:"4–6 kg",diet:"Kemiruvchilar, qushlar, hasharotlar",population:"Kam",lifespan:"8-10 yil",habitat:"Baland tog'lar",description:"Tibet tulki. Baland tog'larda yashaydi. Mo'ynasi qalin va issiq.",features:["Qalin mo'yna","Baland tog'da yashaydi"],threats:["Iqlim o'zgarishi"]},
+  {id:16,nameUz:"Qor qo'zi (markhor)",nameLat:"Capra falconeri",emoji:"🐐",c1:"#5a4a3a",c2:"#1a1208",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Tyanshan, Pomir",size:"140–180 sm",weight:"80–110 kg",diet:"Tog' o'simliklari",population:"~200–300 ta",lifespan:"12-15 yil",habitat:"Qoyalar, baland tog'lar",description:"Noyob tog' echkisi. Buralgan shoxi bilan mashhur. Baland qoyalarda yashaydi.",features:["Buralgan shox","Qoyaga chiqadi"],threats:["Ovlash (shoxi uchun)"]},
+  {id:17,nameUz:"Uzun quloqli tipratikan",nameLat:"Hemiechinus auritus",emoji:"🦔",c1:"#6a5a3a",c2:"#2a1a08",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Sutemizuvchi",region:"O'zbekiston bo'ylab",size:"15–25 sm",weight:"300–500 g",diet:"Hasharotlar, mayda hayvonlar",population:"Kam o'rganilgan",lifespan:"4-6 yil",habitat:"Cho'l, dasht",description:"Kichik tungi hayvon. Tikanlari bilan himoyalanadi. Cho'l sharoitiga moslashgan.",features:["Tikanlari bor","Kechasi faol"],threats:["Yashash joyi"]},
+  {id:18,nameUz:"Qizil tulki",nameLat:"Vulpes vulpes",emoji:"🦊",c1:"#8a4a2a",c2:"#3a1a08",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"O'zbekiston bo'ylab",size:"45–90 sm",weight:"3–14 kg",diet:"Kemiruvchilar, qushlar, mevalar",population:"~5000–10000",lifespan:"3-6 yil",habitat:"Ko'p joylarda",description:"Keng tarqalgan tulki. O'zbekistonda ko'p uchraydi. Aqlli va moslashuvchan.",features:["Aqlli","Moslashuvchan"],threats:["Ovlash (mo'ynasi uchun)"]},
+  {id:19,nameUz:"Sug'ur",nameLat:"Marmota menzbieri",emoji:"🐿️",c1:"#6a4a3a",c2:"#2a1a08",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Tyanshan",size:"40–60 sm",weight:"3–5 kg",diet:"O'tlar, o'simliklar",population:"~1000–2000",lifespan:"10-15 yil",habitat:"Baland tog' o'tloqlari",description:"Menzbir sug'uri. Faqat Tyanshanda yashaydi. Noyob va kam o'rganilgan tur.",features:["Katta kemiruvchi","Koloniyada yashaydi"],threats:["Ovlash","Yashash joyi"]},
+  {id:20,nameUz:"Baqra",nameLat:"Ovis vignei",emoji:"🐏",c1:"#5a3a2a",c2:"#1a0a05",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"Ustyurt, Qizilqum",size:"110–140 sm",weight:"40–60 kg",diet:"Cho'l o'simliklari",population:"~1000–2000",lifespan:"10-12 yil",habitat:"Cho'l va tog' etaklari",description:"Yovvoyi qo'y. O'zbekistonda Ustyurtda yashaydi. Noyob tur.",features:["Cho'lda yashaydi","Shoxi bor"],threats:["Ovlash","Yashash joyi"]},
+  {id:21,nameUz:"Tog' echkisi",nameLat:"Capra sibirica",emoji:"🐐",c1:"#5a4a3a",c2:"#1a1208",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Sutemizuvchi",region:"Tyanshan, Pomir",size:"130–170 sm",weight:"60–100 kg",diet:"Tog' o'simliklari",population:"~3000–5000",lifespan:"15-17 yil",habitat:"Baland tog'lar",description:"Sibir tog' echkisi. Baland qoyalarda yashaydi. Yaxshi chiqadi.",features:["Qoyaga chiqadi","Shoxi uzun"],threats:["Ovlash"]},
+  {id:22,nameUz:"Qorqiz qushi",nameLat:"Pelecanus crispus",emoji:"🦢",c1:"#4a6a8a",c2:"#1a2a3a",status:"Уязвимый",statusColor:"#e67e22",riskLevel:3,type:"Qush",region:"Orol dengizi atrofi",size:"160–180 sm",weight:"10–13 kg",diet:"Baliqlar",population:"~500–1000",lifespan:"15-25 yil",habitat:"Ko'llar, daryo bo'ylari",description:"Yirik suv qushi. O'zbekistonda ko'llarda yashaydi. Katta tumshug'i bilan mashhur.",features:["Katta tumshuq","Baliq yeydi"],threats:["Ko'llar qurishi"]},
+  {id:23,nameUz:"Oq qanotli o'rdak",nameLat:"Oxyura leucocephala",emoji:"🦆",c1:"#4a5a7a",c2:"#0a1a2a",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Qush",region:"Markaziy Osiyo ko'llari",size:"43–48 sm",weight:"500–900 g",diet:"Suv o'simliklari, hasharotlar",population:"~500–1000",lifespan:"10-15 yil",habitat:"Ko'llar",description:"Noyob suv qushi. O'zbekistonda kam uchraydi. Suvda yaxshi suzadi.",features:["Suvda yashaydi","Noyob"],threats:["Ko'llar qurishi","Ovlash"]},
+  {id:24,nameUz:"Qora laylak",nameLat:"Ciconia nigra",emoji:"🦢",c1:"#2a2a3a",c2:"#0a0a1a",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Qush",region:"O'zbekiston bo'ylab",size:"95–100 sm",weight:"3 kg",diet:"Baliqlar, amfibiyalar, hasharotlar",population:"~100–200 juft",lifespan:"20-25 yil",habitat:"O'rmonlar, daryo bo'ylari",description:"Qora laylak. O'zbekistonda kam uchraydi. Migratsiya qiladi.",features:["Migratsiya qiladi","Katta qush"],threats:["Yashash joyi"]},
+  {id:25,nameUz:"Qizil boshli qush",nameLat:"Rhodopechys sanguineus",emoji:"🐦",c1:"#8a3a4a",c2:"#2a0a1a",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Qush",region:"Tyanshan",size:"13–15 sm",weight:"15–25 g",diet:"Urug'lar, hasharotlar",population:"Kam",lifespan:"5-8 yil",habitat:"Baland tog'lar",description:"Kichik tog' qushi. Baland tog'larda yashaydi.",features:["Kichik","Tog'da yashaydi"],threats:["Yashash joyi"]},
+  {id:26,nameUz:"Zubr (yevropa bison)",nameLat:"Bison bonasus",emoji:"🐂",c1:"#4a3520",c2:"#1a0a05",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"O'zbekistonga reintroduksiya",size:"250–330 sm",weight:"400–1000 kg",diet:"O'tlar, barglar",population:"~50–100 (qo'riqxonalarda)",lifespan:"20-25 yil",habitat:"O'rmonlar",description:"Yevropa bison. Qo'riqxonalarda saqlanadi.",features:["Yirik","Qo'riqxonada"],threats:["Ovlash (tarixiy)"]},
+  {id:27,nameUz:"Qorli qoplon (qora)",nameLat:"Panthera pardus tulliana",emoji:"🐆",c1:"#3a3a3a",c2:"#0a0a0a",status:"Исчезающий",statusColor:"#e63946",riskLevel:5,type:"Sutemizuvchi",region:"Janubiy O'zbekiston",size:"100–150 sm",weight:"30–70 kg",diet:"Yirik hayvonlar",population:"~10–20 ta",lifespan:"12-15 yil",habitat:"Tog'lar",description:"Old Osiyo qoploni. O'zbekistonda juda kam qolgan.",features:["Noyob","Tog'da yashaydi"],threats:["Ovlash","Yashash joyi"]},
+  {id:28,nameUz:"Qizil kitobli tulki",nameLat:"Vulpes cana",emoji:"🦊",c1:"#8a6a4a",c2:"#3a2a10",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Sutemizuvchi",region:"Janubiy O'zbekiston",size:"40–50 sm",weight:"1–2 kg",diet:"Hasharotlar, mevalar",population:"Kam",lifespan:"4-6 yil",habitat:"Toshloq joylar",description:"Kichik tulki. O'zbekistonda kam uchraydi.",features:["Kichik","Tunda faol"],threats:["Yashash joyi"]},
+  {id:29,nameUz:"Cho'l mushugi",nameLat:"Felis margarita",emoji:"🐱",c1:"#a89070",c2:"#3a2a10",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Sutemizuvchi",region:"Qizilqum",size:"40–55 sm",weight:"1.5–3.5 kg",diet:"Kemiruvchilar, sudralib yuruvchilar",population:"Noma'lum",lifespan:"8-10 yil",habitat:"Cho'l",description:"Cho'l mushugi. O'zbekistonda Qizilqumda uchraydi. Juda yaxshi eshitadi.",features:["Cho'lda yashaydi","Yaxshi eshitadi"],threats:["Yashash joyi"]},
+  {id:30,nameUz:"Katta quloqli qush",nameLat:"Bubo bubo",emoji:"🦉",c1:"#5a4a2a",c2:"#2a1a05",status:"Редкий",statusColor:"#4a90e2",riskLevel:2,type:"Qush",region:"O'zbekiston bo'ylab",size:"60–75 sm",weight:"1.5–4 kg",diet:"Kemiruvchilar, qushlar",population:"~500–1000 juft",lifespan:"20 yil",habitat:"Tog', cho'l, o'rmon",description:"Katta boyqush. O'zbekistonda keng tarqalgan. Kechasi faol.",features:["Katta ko'zlari","Kechasi ov qiladi"],threats:["Ovlash"]}
+];
+
+animals.forEach(a => {
+  a.image = IMG[a.id] || makeSVG(a.emoji, a.c1, a.c2, a.id);
+  a.fallback = makeSVG(a.emoji, a.c1, a.c2, a.id);
+  if(!a.lifespan) a.lifespan="Ma'lum emas";
+  if(!a.habitat) a.habitat="Ma'lum emas";
+  if(!a.features) a.features=["Noyob tur"];
+  if(!a.threats) a.threats=["Noma'lum"];
+});
+
+let currentPage='home';
+let favorites=[];
+try { favorites = JSON.parse(localStorage.getItem('qizil_kitob_favs')||'[]'); } catch(e) { favorites=[]; }
+
+/* HERO FLOATING */
+function initHeroFloating(){
+  const c=document.getElementById('heroFloating');
+  const picks=[2,5,1,8,10,4];
+  c.innerHTML = picks.map(id => {
+    const a=animals.find(x=>x.id===id);
+    return '<div class="float-card"><img src="'+a.image+'" onerror="this.onerror=null;this.src=\''+a.fallback+'\'" alt="'+a.nameUz+'"></div>';
+  }).join('');
+}
+
+/* NAV */
+function showPage(page){
+  currentPage=page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const target=document.getElementById('page-'+page);
+  if(target)target.classList.add('active');
+  const btn=document.querySelector('.nav-btn[data-page="'+page+'"]');
+  if(btn)btn.classList.add('active');
+  if(page==='home')renderHome();
+  if(page==='animals')renderAnimals();
+  if(page==='stats')renderStats();
+  if(page==='favorites')renderFavorites();
+  if(page==='quiz')renderQuizHome();
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(revealCheck,100);
+}
+
+/* HOME */
+function renderHome(){
+  const total=animals.length;
+  const end=animals.filter(a=>a.status==='Исчезающий'||a.status==='Вымерший').length;
+  const types=new Set(animals.map(a=>a.type)).size;
+  const favs=favorites.length;
+  document.getElementById('heroStats').innerHTML=
+    '<div class="hero-stat"><div class="hero-stat-num" data-target="'+total+'">0</div><div class="hero-stat-label">Turlar</div></div>'+
+    '<div class="hero-stat"><div class="hero-stat-num" data-target="'+end+'">0</div><div class="hero-stat-label">Xavf ostida</div></div>'+
+    '<div class="hero-stat"><div class="hero-stat-num" data-target="'+types+'">0</div><div class="hero-stat-label">Turkum</div></div>'+
+    '<div class="hero-stat"><div class="hero-stat-num" data-target="'+favs+'">0</div><div class="hero-stat-label">Sevimli</div></div>';
+  animateCounters();
+  const picks=[2,3,4,5,6,9];
+  document.getElementById('topAnimals').innerHTML = picks.map(id => {
+    const a=animals.find(x=>x.id===id);
+    return '<div class="top-animal" onclick="openDetail('+a.id+')"><img src="'+a.image+'" onerror="this.onerror=null;this.src=\''+a.fallback+'\'" alt="'+a.nameUz+'"><div class="top-animal-info"><h4>'+a.nameUz+'</h4><p>'+a.nameLat+'</p></div></div>';
+  }).join('');
+}
+
+function animateCounters(){
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target);
+    let cur=0;
+    const step=Math.max(1,Math.ceil(target/40));
+    const t=setInterval(()=>{
+      cur+=step;
+      if(cur>=target){cur=target;clearInterval(t);}
+      el.textContent=cur;
+    },30);
+  });
+}
+
+/* ANIMALS */
+function renderAnimals(){
+  const grid=document.getElementById('animalsGrid');
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  const statusF=document.getElementById('filterStatus').value;
+  const typeF=document.getElementById('filterType').value;
+  const sortBy=document.getElementById('sortBy').value;
+  let list=animals.filter(a=>{
+    const mQ=!q||a.nameUz.toLowerCase().includes(q)||a.nameLat.toLowerCase().includes(q);
+    const mS=!statusF||a.status===statusF;
+    const mT=!typeF||a.type===typeF;
+    return mQ&&mS&&mT;
+  });
+  if(sortBy==='name')list.sort((a,b)=>a.nameUz.localeCompare(b.nameUz));
+  else list.sort((a,b)=>b.riskLevel-a.riskLevel);
+  if(list.length===0){
+    grid.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><h3>Hech narsa topilmadi</h3></div>';
+    return;
+  }
+  grid.innerHTML=list.map((a,i)=>cardHTML(a,i)).join('');
+}
+
+function cardHTML(a,i){
+  const isFav=favorites.includes(a.id);
+  return '<div class="animal-card" style="animation-delay:'+(i*0.04)+'s" onclick="openDetail('+a.id+')">'+
+    '<div class="card-img-wrap">'+
+      '<img class="card-img" src="'+a.image+'" onerror="this.onerror=null;this.src=\''+a.fallback+'\'" alt="'+a.nameUz+'" loading="lazy">'+
+      '<span class="card-status" style="background:'+a.statusColor+'">'+a.status+'</span>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<div class="card-name">'+a.nameUz+'</div>'+
+      '<div class="card-latin">'+a.nameLat+'</div>'+
+      '<div class="card-meta">'+
+        '<span class="card-tag">📍 '+a.region.split(',')[0]+'</span>'+
+        '<span class="card-tag">📏 '+a.size.split(',')[0]+'</span>'+
+      '</div>'+
+      '<button class="fav-btn '+(isFav?'active':'')+'" onclick="event.stopPropagation();toggleFav('+a.id+')">'+(isFav?'❤️':'🤍')+'</button>'+
+    '</div>'+
+  '</div>';
+}
+
+/* DETAIL */
+function openDetail(id){
+  const a=animals.find(x=>x.id===id);
+  if(!a)return;
+  const isFav=favorites.includes(a.id);
+  const featuresHTML=(a.features||[]).map(f=>'<li>'+f+'</li>').join('');
+  const threatsHTML=(a.threats||[]).map(t=>'<li>'+t+'</li>').join('');
+  document.getElementById('detailContent').innerHTML=
+    '<button class="back-btn" onclick="showPage(\'animals\')">← Orqaga</button>'+
+    '<div class="detail">'+
+      '<div class="detail-hero">'+
+        '<img class="detail-img" src="'+a.image+'" onerror="this.onerror=null;this.src=\''+a.fallback+'\'" alt="'+a.nameUz+'">'+
+        '<div class="detail-hero-content">'+
+          '<div class="detail-title">'+a.nameUz+'</div>'+
+          '<div class="detail-latin">'+a.nameLat+'</div>'+
+          '<span class="detail-status" style="background:'+a.statusColor+'">● '+a.status+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="detail-body">'+
+        '<div class="detail-grid">'+
+          '<div class="detail-item"><div class="label">📍 Yashash joyi</div><div class="value">'+a.region+'</div></div>'+
+          '<div class="detail-item"><div class="label">🏞️ Habitat</div><div class="value">'+a.habitat+'</div></div>'+
+          '<div class="detail-item"><div class="label">📏 O\'lchami</div><div class="value">'+a.size+'</div></div>'+
+          '<div class="detail-item"><div class="label">⚖️ Vazni</div><div class="value">'+a.weight+'</div></div>'+
+          '<div class="detail-item"><div class="label">🕐 Umr ko\'rishi</div><div class="value">'+a.lifespan+'</div></div>'+
+          '<div class="detail-item"><div class="label">🍎 Oziqlanishi</div><div class="value">'+a.diet+'</div></div>'+
+          '<div class="detail-item"><div class="label">🔢 Populyatsiya</div><div class="value">'+a.population+'</div></div>'+
+          '<div class="detail-item"><div class="label">🦴 Turkum</div><div class="value">'+a.type+'</div></div>'+
+        '</div>'+
+        '<div class="detail-desc"><strong>📖 Tavsif</strong>'+a.description+'</div>'+
+        '<div class="extra-info">'+
+          '<div class="info-card"><h4>✨ Xususiyatlari</h4><ul>'+featuresHTML+'</ul></div>'+
+          '<div class="info-card"><h4>⚠️ Xavf omillari</h4><ul>'+threatsHTML+'</ul></div>'+
+        '</div>'+
+        '<div style="margin-top:2rem;text-align:center;">'+
+          '<button class="btn '+(isFav?'btn-outline':'btn-primary')+'" style="'+(isFav?'border-color:var(--red);color:var(--red);':'')+'" onclick="toggleFav('+a.id+');openDetail('+a.id+');">'+
+            (isFav?'❤️ Sevimlilardan olib tashlash':'🤍 Sevimlilarga qo\'shish')+
+          '</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-detail').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* FAVORITES */
+function toggleFav(id){
+  const idx=favorites.indexOf(id);
+  const a=animals.find(x=>x.id===id);
+  if(idx===-1){favorites.push(id);showToast('❤️ "'+a.nameUz+'" saqlandi');}
+  else{favorites.splice(idx,1);showToast('💔 "'+a.nameUz+'" olib tashlandi');}
+  try { localStorage.setItem('qizil_kitob_favs',JSON.stringify(favorites)); } catch(e) {}
+  updateFavBadge();
+  if(currentPage==='animals')renderAnimals();
+  if(currentPage==='favorites')renderFavorites();
+  if(currentPage==='home')renderHome();
+}
+
+function updateFavBadge(){
+  const b=document.getElementById('favBadge');
+  if(favorites.length>0){b.textContent=favorites.length;b.style.display='inline-block';}
+  else b.style.display='none';
+}
+
+function renderFavorites(){
+  const grid=document.getElementById('favoritesGrid');
+  const list=animals.filter(a=>favorites.includes(a.id));
+  if(list.length===0){
+    grid.innerHTML='<div class="empty"><div class="empty-icon">❤️</div><h3>Hali sevimlilar yo\'q</h3><p>Hayvonlarni ko\'rib, ❤️ tugmasini bosing</p></div>';
+    return;
+  }
+  grid.innerHTML=list.map((a,i)=>cardHTML(a,i)).join('');
+}
+
+/* STATS */
+function renderStats(){
+  const total=animals.length;
+  const statuses={},types={},regions={};
+  animals.forEach(a=>{
+    statuses[a.status]=(statuses[a.status]||0)+1;
+    types[a.type]=(types[a.type]||0)+1;
+    const r=a.region.split(',')[0].trim();
+    regions[r]=(regions[r]||0)+1;
+  });
+  const colors={'Исчезающий':'#e63946','Вымерший':'#2c3e50','Сокращающийся':'#e67e22','Уязвимый':'#f39c12','Редкий':'#4a90e2'};
+  document.getElementById('statusChart').innerHTML=Object.entries(statuses).map(([k,v])=>
+    '<div class="bar-row"><div class="bar-label">'+k+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(v/total*100)+'%;background:'+(colors[k]||'#f4a261')+'">'+v+'</div></div></div>'
+  ).join('');
+  const tColors={'Qush':'#52b788','Sutemizuvchi':'#f4a261','Sudralib yuruvchi':'#ffd166','Baliq':'#4a90e2','Hasharot':'#9b59b6'};
+  document.getElementById('typeChart').innerHTML=Object.entries(types).map(([k,v])=>
+    '<div class="bar-row"><div class="bar-label">'+k+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(v/total*100)+'%;background:'+(tColors[k]||'#f4a261')+'">'+v+'</div></div></div>'
+  ).join('');
+  const maxR=Math.max.apply(null,Object.values(regions));
+  document.getElementById('regionChart').innerHTML=Object.entries(regions).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
+    '<div class="bar-row"><div class="bar-label">'+k+'</div><div class="bar-track"><div class="bar-fill" style="width:'+(v/maxR*100)+'%;background:linear-gradient(90deg,#52b788,#f4a261)">'+v+'</div></div></div>'
+  ).join('');
+}
+
+/* ============================================================
+   QUIZ / TEST TIZIMI
+   ============================================================ */
+let quizState={active:false,questions:[],current:0,score:0,answered:false};
+
+function renderQuizHome(){
+  document.getElementById('quizCategories').style.display='grid';
+  document.getElementById('quizContainer').classList.remove('active');
+}
+
+function startQuiz(filterType){
+  let pool = filterType==='all' ? animals : animals.filter(a=>a.type===filterType);
+  if(pool.length < 4) pool = animals;
+  
+  // Generate 10 questions
+  quizState.questions = generateQuestions(pool, 10);
+  quizState.current = 0;
+  quizState.score = 0;
+  quizState.answered = false;
+  quizState.active = true;
+  
+  document.getElementById('quizCategories').style.display='none';
+  document.getElementById('quizContainer').classList.add('active');
+  renderQuestion();
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function generateQuestions(pool, count){
+  const qs = [];
+  const used = new Set();
+  
+  const types = [
+    // 1. "Qaysi hayvon ... yashaydi?"
+    (a) => {
+      const others = shuffle(animals.filter(x=>x.id!==a.id)).slice(0,3);
+      const opts = shuffle([a, ...others]);
+      return {
+        q: 'Qaysi hayvon "'+a.region.split(',')[0].trim()+'" hududida yashaydi?',
+        opts: opts.map(o=>o.nameUz),
+        correct: opts.findIndex(o=>o.id===a.id),
+        animalId: a.id
+      };
+    },
+    // 2. "Nomi lotincha ... qaysi?"
+    (a) => {
+      const others = shuffle(animals.filter(x=>x.id!==a.id)).slice(0,3);
+      const opts = shuffle([a, ...others]);
+      return {
+        q: '"'+a.nameLat+'" lotincha nomi qaysi hayvonga tegishli?',
+        opts: opts.map(o=>o.nameUz),
+        correct: opts.findIndex(o=>o.id===a.id),
+        animalId: a.id
+      };
+    },
+    // 3. Holat
+    (a) => {
+      const allStatuses = ['Исчезающий','Вымерший','Сокращающийся','Уязвимый','Редкий'];
+      const others = shuffle(allStatuses.filter(s=>s!==a.status)).slice(0,3);
+      const opts = shuffle([a.status, ...others]);
+      return {
+        q: '"'+a.nameUz+'" qanday himoya holatida?',
+        opts: opts,
+        correct: opts.indexOf(a.status),
+        animalId: a.id
+      };
+    },
+    // 4. Oziqlanishi
+    (a) => {
+      const others = shuffle(animals.filter(x=>x.id!==a.id)).slice(0,3);
+      const opts = shuffle([a, ...others]);
+      return {
+        q: 'Qaysi hayvon quyidagicha oziqlanadi: '+a.diet+'?',
+        opts: opts.map(o=>o.nameUz),
+        correct: opts.findIndex(o=>o.id===a.id),
+        animalId: a.id
+      };
+    },
+    // 5. Turkum
+    (a) => {
+      const allTypes = ['Qush','Sutemizuvchi','Sudralib yuruvchi'];
+      const others = shuffle(allTypes.filter(t=>t!==a.type));
+      const opts = shuffle([a.type, ...others].slice(0,3));
+      while(opts.length < 4) opts.push('Boshqa');
+      return {
+        q: '"'+a.nameUz+'" qaysi turkumga kiradi?',
+        opts: opts,
+        correct: opts.indexOf(a.type),
+        animalId: a.id
+      };
+    }
+  ];
+  
+  const poolShuffled = shuffle(pool);
+  let idx = 0;
+  while(qs.length < count && idx < poolShuffled.length * 3){
+    const a = poolShuffled[idx % poolShuffled.length];
+    const key = a.id + '-' + (qs.length % types.length);
+    if(!used.has(key)){
+      used.add(key);
+      const gen = types[qs.length % types.length];
+      qs.push(gen(a));
+    }
+    idx++;
+    if(idx > 200) break;
+  }
+  
+  return qs.slice(0, count);
+}
+
+function renderQuestion(){
+  const q = quizState.questions[quizState.current];
+  if(!q){ showResult(); return; }
+  quizState.answered = false;
+  
+  const progress = ((quizState.current) / quizState.questions.length) * 100;
+  document.getElementById('quizProgress').style.width = progress + '%';
+  document.getElementById('quizCounter').textContent = 'Savol '+(quizState.current+1)+'/'+quizState.questions.length;
+  document.getElementById('quizScore').textContent = 'Ball: '+quizState.score;
+  
+  const letters = ['A','B','C','D'];
+  const answersHTML = q.opts.map((opt,i)=>
+    '<button class="quiz-answer" data-idx="'+i+'" onclick="selectAnswer('+i+')"><span class="answer-letter">'+letters[i]+'</span>'+opt+'</button>'
+  ).join('');
+  
+  document.getElementById('quizContent').innerHTML =
+    '<div class="quiz-question">'+q.q+'</div>'+
+    '<div class="quiz-answers">'+answersHTML+'</div>';
+}
+
+function selectAnswer(idx){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  
+  const q = quizState.questions[quizState.current];
+  const buttons = document.querySelectorAll('.quiz-answer');
+  
+  buttons.forEach((b,i)=>{
+    b.classList.add('disabled');
+    if(i === q.correct) b.classList.add('correct');
+    if(i === idx && idx !== q.correct) b.classList.add('wrong');
+  });
+  
+  if(idx === q.correct){
+    quizState.score += 10;
+    document.getElementById('quizScore').textContent = 'Ball: '+quizState.score;
+    showToast('✅ To\'g\'ri! +10 ball');
+  } else {
+    showToast('❌ Xato. To\'g\'ri javob: '+q.opts[q.correct]);
+  }
+  
+  setTimeout(()=>{
+    quizState.current++;
+    if(quizState.current >= quizState.questions.length){
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  }, 1500);
+}
+
+function showResult(){
+  const total = quizState.questions.length * 10;
+  const pct = Math.round((quizState.score / total) * 100);
+  let emoji = '😢';
+  let msg = 'Yana urinib ko\'ring!';
+  if(pct >= 90){ emoji='🏆'; msg='Ajoyib natija! Siz haqiqiy bilimdonsiz!'; }
+  else if(pct >= 70){ emoji='🎉'; msg='Yaxshi natija! Yana ozgina o\'qisangiz bo\'ladi.'; }
+  else if(pct >= 50){ emoji='👍'; msg='Yomon emas! Yana mashq qiling.'; }
+  else { emoji='📚'; msg='Ko\'proq o\'qishingiz kerak. Omad!'; }
+  
+  document.getElementById('quizProgress').style.width = '100%';
+  document.getElementById('quizContent').innerHTML =
+    '<div class="quiz-result">'+
+      '<div class="quiz-result-emoji">'+emoji+'</div>'+
+      '<h3>Test yakunlandi!</h3>'+
+      '<div class="quiz-result-score">'+quizState.score+' / '+total+'</div>'+
+      '<p>'+msg+'<br>Sizning natijangiz: <strong style="color:var(--gold-l)">'+pct+'%</strong></p>'+
+      '<div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">'+
+        '<button class="quiz-btn" onclick="startQuiz(\'all\')">🔄 Yana urinish</button>'+
+        '<button class="btn btn-outline" onclick="renderQuizHome()">📋 Boshqa mavzu</button>'+
+      '</div>'+
+    '</div>';
+}
+
+/* TOAST */
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* SCROLL */
+window.addEventListener('scroll',()=>{
+  document.getElementById('header').classList.toggle('scrolled',window.scrollY>50);
+  document.getElementById('scrollTop').classList.toggle('show',window.scrollY>400);
+  revealCheck();
+});
+function revealCheck(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    const rect=el.getBoundingClientRect();
+    if(rect.top<window.innerHeight-100)el.classList.add('visible');
+  });
+}
+
+/* INIT */
+initHeroFloating();
+renderHome();
+updateFavBadge();
+setTimeout(revealCheck,500);
+</script>
+
+</body>
+</html>
